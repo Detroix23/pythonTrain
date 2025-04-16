@@ -1,0 +1,180 @@
+Program took 0.12 seconds to execute in a grid of 3 by 3
+Over 100 iterations total and whilst the bot had 100 moves, it managed to fall of 100 times
+The probability of the bot falling of was of 1.0
+
+Multi run with lx = 5; ly = 5, stx = 3; sty = 3
+, n = [15, 16, 17, 18, 19, 20], r = 1000
+Multi run with lx = 5; ly = 5, stx = 3; sty = 3
+, n = [15, 16, 17, 18, 19, 20], r = 1000
+Multi run with lx = 5; ly = 5, stx = 3; sty = 3
+, n = [3, 4, 5, 6, 7, 8], r = [1000]
+Classic single run with lx = 5; ly = 5, stx = 3; sty = 3
+Program took 0.0 seconds to execute
+Over 1000 iterations total and whilst the bot had 3 moves, it managed to fall of 58 times
+The probability of the bot falling of was of 0.058
+
+Classic single run with lx = 5; ly = 5, stx = 3; sty = 3
+Program took 0.0 seconds to execute
+Over 1000 iterations total and whilst the bot had 4 moves, it managed to fall of 213 times
+The probability of the bot falling of was of 0.213
+
+Classic single run with lx = 5; ly = 5, stx = 3; sty = 3
+Program took 0.0 seconds to execute
+Over 1000 iterations total and whilst the bot had 5 moves, it managed to fall of 414 times
+The probability of the bot falling of was of 0.414
+
+Classic single run with lx = 5; ly = 5, stx = 3; sty = 3
+Program took 0.0 seconds to execute
+Over 1000 iterations total and whilst the bot had 6 moves, it managed to fall of 616 times
+The probability of the bot falling of was of 0.616
+
+Classic single run with lx = 5; ly = 5, stx = 3; sty = 3
+Program took 0.0 seconds to execute
+Over 1000 iterations total and whilst the bot had 7 moves, it managed to fall of 789 times
+The probability of the bot falling of was of 0.789
+
+Classic single run with lx = 5; ly = 5, stx = 3; sty = 3
+Program took 0.01 seconds to execute
+Over 1000 iterations total and whilst the bot had 8 moves, it managed to fall of 896 times
+The probability of the bot falling of was of 0.896
+
+Multi run with lx = 5; ly = 5, stx = 3; sty = 3
+, n = [3, 4, 5, 6, 7, 8], r = [1000]
+Classic single run with lx = 5; ly = 5, stx = 3; sty = 3
+Classic single run with lx = 5; ly = 5, stx = 3; sty = 3
+Classic single run with lx = 5; ly = 5, stx = 3; sty = 3
+Classic single run with lx = 5; ly = 5, stx = 3; sty = 3
+Classic single run with lx = 5; ly = 5, stx = 3; sty = 3
+Classic single run with lx = 5; ly = 5, stx = 3; sty = 3
+Classic single run with lx = 5; ly = 5, stx = 3; sty = 3
+Program took 0.03 seconds to execute
+Over 50 iterations total and whilst the bot had 7 moves, it managed to fall of 23 times
+The probability of the bot falling of was of 0.46
+
+Classic single run with lx = 5; ly = 5, stx = 3; sty = 3
+Classic single run with lx = 5; ly = 5, stx = 3; sty = 3
+Program took 0.01 seconds to execute
+Over 15 iterations total and whilst the bot had 7 moves, it managed to fall of 7 times
+The probability of the bot falling of was of 0.4666666666666667
+
+Multi run with lx = 5; ly = 5, stx = 3; sty = 3
+, n = [7], r = [1000, 1000, 1000, 1000]
+Classic single run with lx = 5; ly = 5, stx = 3; sty = 3
+Program took 0.62 seconds to execute
+Over 1000 iterations total and whilst the bot had 7 moves, it managed to fall of 441 times
+The probability of the bot falling of was of 0.441
+
+Classic single run with lx = 5; ly = 5, stx = 3; sty = 3
+Program took 0.64 seconds to execute
+Over 1000 iterations total and whilst the bot had 7 moves, it managed to fall of 688 times
+The probability of the bot falling of was of 0.688
+
+Classic single run with lx = 5; ly = 5, stx = 3; sty = 3
+Program took 0.65 seconds to execute
+Over 1000 iterations total and whilst the bot had 7 moves, it managed to fall of 832 times
+The probability of the bot falling of was of 0.832
+
+Classic single run with lx = 5; ly = 5, stx = 3; sty = 3
+Program took 0.65 seconds to execute
+Over 1000 iterations total and whilst the bot had 7 moves, it managed to fall of 909 times
+The probability of the bot falling of was of 0.909
+
+Classic single run with lx = 5; ly = 5, stx = 3; sty = 3
+Multi run with lx = 5; ly = 5, stx = 3; sty = 3
+, n = [7], r = [1000, 1000, 1000, 1000]
+Classic single run with lx = 5; ly = 5, stx = 3; sty = 3
+Classic single run with lx = 5; ly = 5, stx = 3; sty = 3
+Classic single run with lx = 5; ly = 5, stx = 3; sty = 3
+Classic single run with lx = 5; ly = 5, stx = 3; sty = 3
+Classic single run with lx = 5; ly = 5, stx = 3; sty = 3
+Program took 0.0 seconds to execute
+Over 1 iterations total and whilst the bot had 3 moves, it managed to fall of 0 times
+The probability of the bot falling of was of 0.0
+
+Classic single run with lx = 5; ly = 5, stx = 3; sty = 3
+Multi run with lx = 5; ly = 5, stx = 3; sty = 3
+, n = [5], r = [10000, 10000, 10000, 10000]
+Classic single run with lx = 5; ly = 5, stx = 3; sty = 3
+Program took 0.04 seconds to execute
+Over 10000 iterations total and whilst the bot had 5 moves, it managed to fall of 2613 times
+The probability of the bot falling of was of 0.2613
+
+Classic single run with lx = 5; ly = 5, stx = 3; sty = 3
+Program took 0.05 seconds to execute
+Over 10000 iterations total and whilst the bot had 5 moves, it managed to fall of 4572 times
+The probability of the bot falling of was of 0.4572
+
+Classic single run with lx = 5; ly = 5, stx = 3; sty = 3
+Program took 0.04 seconds to execute
+Over 10000 iterations total and whilst the bot had 5 moves, it managed to fall of 6016 times
+The probability of the bot falling of was of 0.6016
+
+Classic single run with lx = 5; ly = 5, stx = 3; sty = 3
+Program took 0.04 seconds to execute
+Over 10000 iterations total and whilst the bot had 5 moves, it managed to fall of 7107 times
+The probability of the bot falling of was of 0.7107
+
+Multi run with lx = 5; ly = 5, stx = 3; sty = 3
+, n = [5], r = [10000, 10000, 10000, 10000]
+Classic single run with lx = 5; ly = 5, stx = 3; sty = 3
+Classic single run with lx = 5; ly = 5, stx = 3; sty = 3
+Classic single run with lx = 5; ly = 5, stx = 3; sty = 3
+Classic single run with lx = 5; ly = 5, stx = 3; sty = 3
+Multi run with lx = 5; ly = 5, stx = 3; sty = 3
+, n = [3, 4, 5, 6, 7, 8, 9, 10], r = [10000]
+Classic single run with lx = 5; ly = 5, stx = 3; sty = 3
+Program took 0.03 seconds to execute
+Over 10000 iterations total and whilst the bot had 3 moves, it managed to fall of 641 times
+The probability of the bot falling of was of 0.0641
+
+Classic single run with lx = 5; ly = 5, stx = 3; sty = 3
+Program took 0.03 seconds to execute
+Over 10000 iterations total and whilst the bot had 4 moves, it managed to fall of 2095 times
+The probability of the bot falling of was of 0.2095
+
+Classic single run with lx = 5; ly = 5, stx = 3; sty = 3
+Program took 0.04 seconds to execute
+Over 10000 iterations total and whilst the bot had 5 moves, it managed to fall of 4192 times
+The probability of the bot falling of was of 0.4192
+
+Classic single run with lx = 5; ly = 5, stx = 3; sty = 3
+Program took 0.06 seconds to execute
+Over 10000 iterations total and whilst the bot had 6 moves, it managed to fall of 6245 times
+The probability of the bot falling of was of 0.6245
+
+Classic single run with lx = 5; ly = 5, stx = 3; sty = 3
+Program took 0.06 seconds to execute
+Over 10000 iterations total and whilst the bot had 7 moves, it managed to fall of 7865 times
+The probability of the bot falling of was of 0.7865
+
+Classic single run with lx = 5; ly = 5, stx = 3; sty = 3
+Program took 0.07 seconds to execute
+Over 10000 iterations total and whilst the bot had 8 moves, it managed to fall of 8942 times
+The probability of the bot falling of was of 0.8942
+
+Classic single run with lx = 5; ly = 5, stx = 3; sty = 3
+Program took 0.07 seconds to execute
+Over 10000 iterations total and whilst the bot had 9 moves, it managed to fall of 9589 times
+The probability of the bot falling of was of 0.9589
+
+Classic single run with lx = 5; ly = 5, stx = 3; sty = 3
+Program took 0.07 seconds to execute
+Over 10000 iterations total and whilst the bot had 10 moves, it managed to fall of 9846 times
+The probability of the bot falling of was of 0.9846
+
+Multi run with lx = 5; ly = 5, stx = 3; sty = 3
+, n = [3, 4, 5, 6, 7, 8, 9, 10], r = [10000]
+Classic single run with lx = 5; ly = 5, stx = 3; sty = 3
+Classic single run with lx = 5; ly = 5, stx = 3; sty = 3
+Classic single run with lx = 5; ly = 5, stx = 3; sty = 3
+Classic single run with lx = 5; ly = 5, stx = 3; sty = 3
+Classic single run with lx = 5; ly = 5, stx = 3; sty = 3
+Classic single run with lx = 5; ly = 5, stx = 3; sty = 3
+Classic single run with lx = 5; ly = 5, stx = 3; sty = 3
+Classic single run with lx = 5; ly = 5, stx = 3; sty = 3
+Classic single run with lx = 5; ly = 5, stx = 3; sty = 3
+Program took 0.19 seconds to execute
+Over 100 iterations total and whilst the bot had 100 moves, it managed to fall of 100 times
+The probability of the bot falling of was of 1.0
+
+Classic single run with lx = 5; ly = 5, stx = 3; sty = 3
