@@ -203,7 +203,7 @@ def zone(shape, max_safe=-1):
         #print(f"ZONE - Pos testing: {x},{y}")
         """
 
-        # V2 Spiral
+        # V2 Spiral (no stop)
 
         ## Follow compass
         for l in range(int(i)):
@@ -279,6 +279,21 @@ def zone_print(zone, xmin=0, xmax=0, ymin=0, ymax=0, occ="# ", blk="* ", org=Fal
         ## New line
         table += "\n"
 
+    x = card["xmin"]
+    y = card["ymin"]
+    while x < card["xmax"]+1:
+        while y < card["ymax"]+1:
+            if org and (x, y) == (0, 0):
+                table += ORG
+            elif (x, y) in zone:
+                table += OCC
+            else:
+                table += BLK
+            y += 1
+        ## New line
+        table += "\n"
+        x += 1
+
     return table
 
 
@@ -300,10 +315,10 @@ r1.set_pos(2, 3)
 print("SHAPE - Test rectangle 1: ", r1)
 
 r1z = zone(r1, 255)
-print("SHAPE - Test disk's 1 zone: ", r1z)
+print("SHAPE - Test rectangle's 1 zone: ", r1z)
 
 z2 = zone_print(zone=r1z, occ=" @ ", blk=" * ", org=" 0 ")
-print("SHAPE - Zone 1:\n" + z2)
+print("SHAPE - Rectangle's zone 1:\n" + z2)
 
 
 
