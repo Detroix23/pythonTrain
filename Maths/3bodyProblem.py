@@ -54,13 +54,23 @@ class Elem:
         # print(vectorDistance[1] / vectorDistance[0], vectorDistance[1], vectorDistance[0])
         theta = math.atan2(vectorDistance[1], vectorDistance[0])    ### Radians
         ## thetaDeg = math.degrees(theta)
+        # Distance (limited)
+        r = self.distance_to(target)
+        if r < (self.size / 2 + target.size / 2):
+            r = (self.size / 2 + target.size / 2)
         # Value
-        F = (self.B.G * self.mass * target.mass) / (self.distance_to(target) ** 2)
+        F = (self.B.G * self.mass * target.mass) / (r ** (2 + self.B.ra))
         # Force vector
-        vectorForce = [F * math.cos(theta), F * math.sin(theta)]
+        ### Rectification because we go anti-trigonometric way, clockwise.
+        vectorForce = [F * -math.cos(theta), F * -math.sin(theta)]
 
-        # if F > 0.1: print("Interaction", F)
+        # if F > 0.1:
+            # print("Interaction:", F)
+            # print("Force vector:", vectorForce)
         return vectorForce
+
+    def collision_with(self, target):
+        pass
 
     def move(self):
         """
@@ -70,27 +80,44 @@ class Elem:
         self.pos = [
             self.pos[0] + (self.forceVector[0] / (self.mass * self.B.d)),
             self.pos[1] + (self.forceVector[1] / (self.mass * self.B.d))]
+
         # Check edges
-        if self.pos[0] > self.B.width:
+        if self.pos[0] + self.size / 2 > self.B.width:
             if self.B.edges == "bounce":
                 self.forceVector = [
-                    -self.forceVector[0],
+                    self.forceVector[0] * -self.B.bounceFactor,
+                    self.forceVector[1]]
+            elif self.B.edges == "hard":
+                self.forceVector = [
+                    0,
                     self.forceVector[1]]
         elif self.pos[0] < 0:
             if self.B.edges == "bounce":
                 self.forceVector = [
-                    -self.forceVector[0],
+                    self.forceVector[0] * -self.B.bounceFactor,
                     self.forceVector[1]]
-        if self.pos[1] > self.B.height:
+            elif self.B.edges == "hard":
+                self.forceVector = [
+                    0,
+                    self.forceVector[1]]
+        if self.pos[1] + self.size / 2 > self.B.height:
             if self.B.edges == "bounce":
                 self.forceVector = [
                     self.forceVector[0],
-                    -self.forceVector[1]]
+                    self.forceVector[1] * -self.B.bounceFactor]
+            elif self.B.edges == "hard":
+                self.forceVector = [
+                    0,
+                    self.forceVector[1]]
         elif self.pos[1] < 0:
             if self.B.edges == "bounce":
                 self.forceVector = [
                     self.forceVector[0],
-                    -self.forceVector[1]]
+                    self.forceVector[1] * -self.B.bounceFactor]
+            elif self.B.edges == "hard":
+                self.forceVector = [
+                    0,
+                    self.forceVector[1]]
 
 
     def draw(self):
@@ -103,13 +130,14 @@ class Elem:
 
 # GUI
 class Board:
-    def __init__(self, width=128, height=128, title="Simulation", fps=30, edges="none", d=1000, G=10**-11):
+    def __init__(self, width=128, height=128, title="Simulation", fps=30, edges="none", d=1000.0, G=(10**-11), ra=0.0, bounceFactor=1.0):
         """
         Initialize the game.
         Args:
             @edges (string): {none, hard, bounce, tor}
         """
         # Vars
+        self.ra = ra    ### R expoential arrengement, softener
         self.G = G
         self.d = d      ### D factor
         self.edges = edges
@@ -117,12 +145,16 @@ class Board:
         self.height = height
         self.title = title
         self.fps = fps
+        self.bounceFactor = bounceFactor
+
 
         # Init elems
         ## Elems
         self.system = {
-            "Plan1": Elem(self, 500, 445, 480, fInit=[0, 0], size=5),
-            "Plan2": Elem(self,400, 440, 450, fInit=[0, 0], size=4)
+            "Plan1": Elem(self, 500, 445, 560, name="Plan1", fInit=[-10000, 0], size=5),
+            "Plan2": Elem(self, 400, 440, 450, name="Plan2", fInit=[10000, 0], size=4),
+            "Plan3": Elem(self, 300, 425, 400, name="Plan3", fInit=[-5000, 5000], size=3),
+            "Plan4": Elem(self, 300, 400, 350, name="Plan4", fInit=[-2000, 3000], size=6)
         }
 
         ## Representation
@@ -130,11 +162,11 @@ class Board:
 
         self.elemsX = []
         self.elemsY = []
-        print("## Initialization of the elements: ")
+        # print("## Initialization of the elements: ")
         for name, elem in self.system.items():
             self.elemsX.append(elem.pos[0])
             self.elemsY.append(elem.pos[1])
-            print("-", elem)
+            # print("-", elem)
 
         # Init simulation screen
         pyxel.init(width=width, height=height, title=title, fps=fps)
@@ -149,14 +181,14 @@ class Board:
         # Calc interactions
         ## Check for each element, all elements.
         for elemMain in self.system.values():
-            #print(elemMain)
+            # print(elemMain.name, ":", elemMain.forceVector[0], elemMain.forceVector[1], end=" - ")
             for elemTarget in self.system.values():
                 if elemMain != elemTarget:
                     targetForce = elemMain.gforce_from(elemTarget)
                     elemMain.forceVector = [
                         elemMain.forceVector[0] + targetForce[0],
-                        elemMain.forceVector[1] - targetForce[1]
-                    ]
+                        elemMain.forceVector[1] + targetForce[1]]
+        # print()
         # Move
         for elem in self.system.values():
             elem.move()
@@ -175,7 +207,7 @@ class Board:
 # Run
 print("# Three body problem simulations")
 # Completion
-SIM = Board(width=1000, height=1000, title="Simulation", fps=30, edges="bounce", d=100, G=(6.67*(10**1)))
+SIM = Board(width=1000, height=1000, title="Simulation", fps=30, edges="bounce", d=100, G=(6.67*(10**1)), ra=-0.3, bounceFactor=0.9)
 
 
 
