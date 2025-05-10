@@ -3,169 +3,63 @@ Simulation of planet movement
 Use of gravitational formula: F = (m1*m2) / d**2
 We consider that all elements are spherical
 """
+
 # Imports
 import math
 ## Representation
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 import pyxel
 
+# Types
+## type vect = tuple[float, float]
+
 # Simulation
-def mean(vect):
+def mean(vect: list[float]) -> float:
     """
     Compute vector mean
     """
     return math.sqrt((vect[0]**2) + (vect[1]**2))
 
-class Elem:
-    """
-    Define a stellar element
-    """
-    CHECK_RADIUS = 100
-    
-    def __init__(self, BOARD, mass, xStart, yStart, fInit=[0, 0], vInit=0, color=5, size=2, name=""):
-        """
-        Creation of the elem, with "mass, vInit, xStart, yStart, color=5, size=2".
-        """
-        self.B = BOARD
-        self.mass = mass
-        self.velocity = vInit
-        self.pos = [xStart, yStart]
-        self.forceVector = fInit
-
-        self.size = size
-        self.color = color
-        self.name = name
-
-    def __str__(self):
-        return f"Elem {self.name} - Position: x={self.pos[0]}; y={self.pos[1]}, Mass: m={self.mass}, Force: x={self.forceVector[0]}; y={self.forceVector[1]}."
-
-    def distance_to(self, target):
-        """
-        Compute distance between this elem and the target elem
-        """
-        return math.sqrt((self.pos[0] - target.pos[0])**2 + (self.pos[1] - target.pos[1])**2)
-    
-    def gforce_from(self, target):
-        """
-        Find the gravitational force vector
-        """
-        # Direction
-        vectorDistance = [self.pos[0] - target.pos[0], self.pos[1] - target.pos[1]]
-        # print(vectorDistance[1] / vectorDistance[0], vectorDistance[1], vectorDistance[0])
-        theta = math.atan2(vectorDistance[1], vectorDistance[0])    ### Radians
-        ## thetaDeg = math.degrees(theta)
-        # Distance (limited)
-        r = self.distance_to(target)
-        if r < (self.size / 2 + target.size / 2):
-            r = (self.size / 2 + target.size / 2)
-        # Value
-        F = (self.B.G * self.mass * target.mass) / (r ** (2 + self.B.ra))
-        # Force vector
-        ### Rectification because we go anti-trigonometric way, clockwise.
-        vectorForce = [F * -math.cos(theta), F * -math.sin(theta)]
-
-        # if F > 0.1:
-            # print("Interaction:", F)
-            # print("Force vector:", vectorForce)
-        return vectorForce
-
-    def collision_with(self, target):
-        pass
-
-    def move(self):
-        """
-        Move the elem, according to force vector at a scale (mass) and checking collison
-        """
-        # Force
-        self.pos = [
-            self.pos[0] + (self.forceVector[0] / (self.mass * self.B.d)),
-            self.pos[1] + (self.forceVector[1] / (self.mass * self.B.d))]
-
-        # Check edges
-        if self.pos[0] + self.size / 2 > self.B.width:
-            if self.B.edges == "bounce":
-                self.forceVector = [
-                    self.forceVector[0] * -self.B.bounceFactor,
-                    self.forceVector[1]]
-            elif self.B.edges == "hard":
-                self.forceVector = [
-                    0,
-                    self.forceVector[1]]
-        elif self.pos[0] < 0:
-            if self.B.edges == "bounce":
-                self.forceVector = [
-                    self.forceVector[0] * -self.B.bounceFactor,
-                    self.forceVector[1]]
-            elif self.B.edges == "hard":
-                self.forceVector = [
-                    0,
-                    self.forceVector[1]]
-        if self.pos[1] + self.size / 2 > self.B.height:
-            if self.B.edges == "bounce":
-                self.forceVector = [
-                    self.forceVector[0],
-                    self.forceVector[1] * -self.B.bounceFactor]
-            elif self.B.edges == "hard":
-                self.forceVector = [
-                    0,
-                    self.forceVector[1]]
-        elif self.pos[1] < 0:
-            if self.B.edges == "bounce":
-                self.forceVector = [
-                    self.forceVector[0],
-                    self.forceVector[1] * -self.B.bounceFactor]
-            elif self.B.edges == "hard":
-                self.forceVector = [
-                    0,
-                    self.forceVector[1]]
-
-
-    def draw(self):
-        """
-        Draw itself on the board
-        """
-        s2 = self.size / 2
-        pyxel.rect(self.pos[0] - s2, self.pos[1] - s2, self.size, self.size, col=self.color)
-        pyxel.rect(self.pos[0], self.pos[1], 1, 1, col=self.color+1)
-
 # GUI
 class Board:
-    def __init__(self, width=128, height=128, title="Simulation", fps=30, edges="none", d=1000.0, G=(10**-11), ra=0.0, bounceFactor=1.0):
+    def __init__(self, width: int = 128, height: int = 128, title: str = "Simulation", fps: int = 30,
+                 edges: str = "none", mass_softener: float = 1000.0, gravitational_constant: float = (10**-11), exponent_softener: float = 0.0, bounce_factor: float = 1.0
+                 ):
         """
         Initialize the game.
         Args:
             @edges (string): {none, hard, bounce, tor}
         """
         # Vars
-        self.ra = ra    ### R expoential arrengement, softener
-        self.G = G
-        self.d = d      ### D factor
-        self.edges = edges
-        self.width = width
-        self.height = height
-        self.title = title
-        self.fps = fps
-        self.bounceFactor = bounceFactor
+        self.exponent_softener: float = exponent_softener    ### Distance expoential softener
+        self.gravitational_constant: float = gravitational_constant
+        self.mass_softener: float = mass_softener      ### Mass factor
+        self.edges: str = edges
+        self.width: int = width
+        self.height: int = height
+        self.title: str = title
+        self.fps: int = fps
+        self.bounce_factor: float = bounce_factor
 
 
         # Init elems
         ## Elems
-        self.system = {
-            "Plan1": Elem(self, 500, 445, 560, name="Plan1", fInit=[-10000, 0], size=5),
-            "Plan2": Elem(self, 400, 440, 450, name="Plan2", fInit=[10000, 0], size=4),
-            "Plan3": Elem(self, 300, 425, 400, name="Plan3", fInit=[-5000, 5000], size=3),
-            "Plan4": Elem(self, 300, 400, 350, name="Plan4", fInit=[-2000, 3000], size=6)
+        self.system: dict[str, Elem] = {
+            "Plan1": Elem(self, 500, (445, 560), name="Plan1", size=5),
+            "Plan2": Elem(self, 400, (440, 450), name="Plan2", size=4),
+            "Plan3": Elem(self, 300, (425, 400), name="Plan3", size=3),
+            "Plan4": Elem(self, 300, (400, 350), name="Plan4", size=6)
         }
 
         ## Representation
         ### Positions
 
-        self.elemsX = []
-        self.elemsY = []
+        self.elemsX: list[float] = []
+        self.elemsY: list[float] = []
         # print("## Initialization of the elements: ")
         for name, elem in self.system.items():
-            self.elemsX.append(elem.pos[0])
-            self.elemsY.append(elem.pos[1])
+            self.elemsX.append(elem.position[0])
+            self.elemsY.append(elem.position[1])
             # print("-", elem)
 
         # Init simulation screen
@@ -174,7 +68,7 @@ class Board:
         # Run
         pyxel.run(self.update, self.draw)
 
-    def update(self):
+    def update(self) -> None:
         """
         Update simulation
         """
@@ -184,16 +78,16 @@ class Board:
             # print(elemMain.name, ":", elemMain.forceVector[0], elemMain.forceVector[1], end=" - ")
             for elemTarget in self.system.values():
                 if elemMain != elemTarget:
-                    targetForce = elemMain.gforce_from(elemTarget)
-                    elemMain.forceVector = [
-                        elemMain.forceVector[0] + targetForce[0],
-                        elemMain.forceVector[1] + targetForce[1]]
+                    target_force: tuple[float, float] = elemMain.gravitational_force_from(elemTarget)
+                    elemMain.force_vector = (
+                        elemMain.force_vector[0] + target_force[0],
+                        elemMain.force_vector[1] + target_force[1])
         # print()
         # Move
         for elem in self.system.values():
             elem.move()
 
-    def draw(self):
+    def draw(self) -> None:
         """
         Draw all simulation
         """
@@ -204,11 +98,104 @@ class Board:
             elem.draw()
 
 
+class Elem:
+    """
+    Define a stellar element
+    """
+    CHECK_RADIUS = 100
+    
+    def __init__(self, BOARD: Board, mass: int, position: tuple[float, float], force_vector: tuple[float, float] = (0, 0), velocity: float = 0,
+                 color: int = 5, size: int = 2, name: str = ""
+                 ) -> None:
+        """
+        Creation of the elem, with "mass, vInit, xStart, yStart, color=5, size=2".
+        """
+        self.BOARD: Board = BOARD
+        self.mass: float = mass
+        self.velocity: float = velocity
+        self.position: tuple[float, float] = position
+        self.force_vector: tuple[float, float] = force_vector
+
+        self.size: int = size
+        self.color: int = color
+        self.name: str = name
+
+    def __str__(self) -> str:
+        return f"Elem {self.name} - Position: x={self.position[0]}; y={self.position[1]}, Mass: m={self.mass}, Force: x={self.force_vector[0]}; y={self.force_vector[1]}."
+
+    def distance_to(self, target) -> float:
+        """
+        Compute distance between this elem and the target elem
+        """
+        return math.sqrt((self.position[0] - target.position[0]) ** 2 + (self.position[1] - target.position[1]) ** 2)
+    
+    def gravitational_force_from(self, target) -> tuple[float, float]:
+        """
+        Find the gravitational force vector
+        """
+        # Direction
+        vector_distance: tuple[float, float] = (self.position[0] - target.position[0], self.position[1] - target.position[1])
+        theta = math.atan2(vector_distance[1], vector_distance[0])          ### Radians
+        ## theta_deg = math.degrees(theta)
+        # Distance (limited)
+        distance: float = self.distance_to(target)
+        if distance < (self.size / 2 + target.size / 2):
+            distance = (self.size / 2 + target.size / 2)
+        # F force value
+        force: float = (self.BOARD.gravitational_constant * self.mass * target.mass) / (distance ** (2 + self.BOARD.exponent_softener))
+        # Force vector
+        ### Rectification because we go anti-trigonometric way, clockwise.
+        vector_force: tuple[float, float] = (force * -math.cos(theta), force * -math.sin(theta))
+
+        return vector_force
+
+    def does_collide_with(self, target) -> bool:
+        ...
+        return True
+
+    def move(self) -> None:
+        """
+        Move the elem, according to force vector at a scale (mass) and checking collision
+        """
+        # Force
+        self.position = (
+            self.position[0] + (self.force_vector[0] / (self.mass * self.BOARD.mass_softener)),
+            self.position[1] + (self.force_vector[1] / (self.mass * self.BOARD.mass_softener)))
+
+        # Check edges
+        ## New for version
+        for axis1 in (0, 1):
+            axis2: int = abs(axis1 - 1)
+            force_vector_list: list[float] = list(self.force_vector)
+
+            if self.position[axis1] + self.size / 2 >= self.BOARD.width or self.position[axis1] <= 0:
+                if self.BOARD.edges == "bounce":
+                    force_vector_list[axis1] = self.force_vector[axis1] * -self.BOARD.bounce_factor
+                    force_vector_list[axis2] = self.force_vector[axis2]
+
+                elif self.BOARD.edges == "hard":
+                    force_vector_list[axis1] = 0.0
+                    force_vector_list[axis2] = self.force_vector[axis2]
+
+            self.force_vector = (force_vector_list[0], force_vector_list[1])
+
+    def draw(self) -> None:
+        """
+        Draw itself on the board
+        """
+        size2 = self.size / 2
+        pyxel.rect(self.position[0] - size2, self.position[1] - size2, self.size, self.size, col=self.color)
+        pyxel.rect(self.position[0], self.position[1], 1, 1, col=self.color + 1)
+
+
+
 # Run
 print("# Three body problem simulations")
 # Completion
-SIM = Board(width=1000, height=1000, title="Simulation", fps=30, edges="bounce", d=100, G=(6.67*(10**1)), ra=-0.3, bounceFactor=0.9)
+SIM: Board = Board(width=1000, height=1000, title="Simulation", fps=30, edges="bounce",
+                   mass_softener=100, gravitational_constant=(6.67*(10**1)), exponent_softener=-0.3, bounce_factor=0.9)
 
+print("---\nEnd")
 
 
 
