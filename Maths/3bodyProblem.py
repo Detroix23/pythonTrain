@@ -167,17 +167,37 @@ class Elem:
         for axis1 in (0, 1):
             axis2: int = abs(axis1 - 1)
             force_vector_list: list[float] = list(self.force_vector)
+            position_list: list[float] = list(self.position)
 
-            if self.position[axis1] + self.size / 2 >= self.BOARD.width or self.position[axis1] <= 0:
+            if self.position[axis1] + self.size / 2 >= self.BOARD.width:
                 if self.BOARD.edges == "bounce":
                     force_vector_list[axis1] = self.force_vector[axis1] * -self.BOARD.bounce_factor
                     force_vector_list[axis2] = self.force_vector[axis2]
+                    ### Force it to be in the board and count reflexion
+                    position_list[axis1] = 2 * self.BOARD.width - self.size / 2 - self.position[axis1]
 
                 elif self.BOARD.edges == "hard":
                     force_vector_list[axis1] = 0.0
                     force_vector_list[axis2] = self.force_vector[axis2]
+                    ### Force it to be in the board
+                    position_list[axis1] = self.BOARD.width - self.size / 2
+                    
+            elif self.position[axis1] <= 0:
+                if self.BOARD.edges == "bounce":
+                    force_vector_list[axis1] = self.force_vector[axis1] * -self.BOARD.bounce_factor
+                    force_vector_list[axis2] = self.force_vector[axis2]
+                    ### Force it to be in the board and count reflexion
+                    position_list[axis1] = 0
+
+                elif self.BOARD.edges == "hard":
+                    force_vector_list[axis1] = 0.0
+                    force_vector_list[axis2] = self.force_vector[axis2]
+                    ### Force it to be in the board
+                    position_list[axis1] = 0
+
 
             self.force_vector = (force_vector_list[0], force_vector_list[1])
+            self.position = (position_list[0], position_list[1])
 
     def draw(self) -> None:
         """

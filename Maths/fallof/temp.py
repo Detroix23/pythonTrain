@@ -69,7 +69,7 @@ def run(r, n):
 
             if vi == True:
                 ###Visual interpretation
-                print(f"Iteration {i} - Move {j} - Direction {dt} - Bot pos {px}: {py}")
+                print(f"Iteration {i} - Move {j} - Direction {dt} - Bot position {px}: {py}")
 
                 for y in range(1, ly + 1):
                     for x in range(1, lx + 1):
