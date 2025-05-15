@@ -57,6 +57,11 @@ class Board:
         self.title: str = title
         self.fps: int = fps
         self.bounce_factor: float = bounce_factor
+
+        # Controls
+        self.camera_x: int = 0
+        self.camera_y: int = 0
+        self.zoom: float = 1
         self.time_speed: float = 0
         self.time_speed_previous: float = 1
 
@@ -108,6 +113,7 @@ class Board:
         """
         Listen to user inputs
         """
+        # Time controls
         if pyxel.btn(pyxel.KEY_SPACE) and self.time_speed != 0:
             self.time_speed_previous = self.time_speed
             self.time_speed = 0
@@ -127,12 +133,33 @@ class Board:
         elif pyxel.btn(pyxel.KEY_6):
             self.time_speed = 10
 
+        # Zoom
+        if pyxel.btn(pyxel.KEY_PAGEUP) and self.zoom > 0.0:
+            self.zoom -= 0.05 * self.zoom
+            #self.width = int(self.width * self.zoom)
+            #self.height = int(self.height * self.zoom)
+        elif pyxel.btn(pyxel.KEY_PAGEDOWN) and self.zoom < 15.0:
+            self.zoom += 0.05
+            #self.width = int(self.width * self.zoom)
+            #self.height = int(self.height * self.zoom)
+
+        # Camera position
+        if pyxel.btn(pyxel.KEY_LEFT):
+            self.camera_x -= int(10 / self.zoom)
+        elif pyxel.btn(pyxel.KEY_RIGHT):
+            self.camera_x += int(10 / self.zoom)
+        if pyxel.btn(pyxel.KEY_DOWN):
+            self.camera_y += int(10 / self.zoom)
+        elif pyxel.btn(pyxel.KEY_UP):
+            self.camera_y -= int(10 / self.zoom)
+
     def text_main(self, text_color: int = 8) -> None:
         x = y = 10
         self.texts_main = [
             "# Three Body Problem - title=" + self.title + "; edges=" + self.edges + ", fps=" + str(self.fps) + ", frames=" + str(pyxel.frame_count),
-            "- Elements: total=" + str(len(self.system)) + "",
+            "- Controls: zoom=" + str(self.zoom) + ", camera: x=" + str(self.camera_x) + "; y=" + str(self.camera_y) + "",
             "- Time: speed=" + str(self.time_speed) + "",
+            "- Elements: total=" + str(len(self.system)) + "",
             "---"]
         for txt in self.texts_main:
             pyxel.text(x, y, txt, text_color)
@@ -158,7 +185,8 @@ class Board:
                     target_force: tuple[float, float] = elemMain.gravitational_force_from(elemTarget)
                     elemMain.force_vector = (
                         elemMain.force_vector[0] + target_force[0],
-                        elemMain.force_vector[1] + target_force[1])
+                        elemMain.force_vector[1] + target_force[1]
+                    )
         # print()
         # Move
         for elem in self.system.values():
@@ -286,9 +314,13 @@ class Elem:
         """
         Draw itself on the board
         """
-        size2 = self.size / 2
-        pyxel.rect(self.position[0] - size2, self.position[1] - size2, self.size, self.size, col=self.color)
-        pyxel.rect(self.position[0], self.position[1], 1, 1, col=self.color + 1)
+        # Draw on computed values
+        size: int = int(self.size * self.BOARD.zoom)
+        position_x: int = int((self.position[0] + self.BOARD.camera_x) * self.BOARD.zoom)
+        position_y: int = int((self.position[1] + self.BOARD.camera_y) * self.BOARD.zoom)
+
+        pyxel.rect(position_x - size / 2, position_y - size / 2, size, size, col=self.color)
+        pyxel.rect(position_x, position_y, 1, 1, col=self.color + 1)
 
 
 
@@ -365,7 +397,7 @@ elif len(system_input) == 1:
 print("Starting...")
 
 # Completion
-SIM: Board = Board(width=1000, height=1000, title="Simulation", fps=30, edges="bounce",
+SIM: Board = Board(width=1000, height=1000, title="Simulation", fps=30, edges="none",
                    system=system_input, mass_softener=100, gravitational_constant=(6.67*(10**1)),
                    exponent_softener=-0.3, bounce_factor=0.9)
 
