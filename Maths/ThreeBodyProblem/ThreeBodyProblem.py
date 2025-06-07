@@ -80,7 +80,8 @@ class Board:
                                              mass=element_stats[0],
                                              position=element_stats[1],
                                              name=element_stats[2],
-                                             size=element_stats[3]
+                                             size=element_stats[3],
+                                             force_vector=element_stats[4]
                                              )
         
         
@@ -179,6 +180,7 @@ class Board:
         # Calc interactions
         ## Check for each element, all elements.
         for elemMain in self.system.values():
+            elemMain.force_vector = (0, 0)
             # print(elemMain.name, ":", elemMain.forceVector[0], elemMain.forceVector[1], end=" - ")
             for elemTarget in self.system.values():
                 if elemMain != elemTarget:
@@ -249,10 +251,10 @@ class Elem:
         ## theta_deg = math.degrees(theta)
         # Distance (limited)
         distance: float = self.distance_to(target)
-        if distance < (self.size / 2 + target.size / 2):
-            distance = (self.size / 2 + target.size / 2)
+        if distance < ((self.size + 1) / 2 + (target.size + 1) / 2):
+            distance = ((self.size + 1) / 2 + (target.size + 1) / 2)
         # F force value
-        force: float = (self.BOARD.gravitational_constant * self.mass * target.mass) / (distance ** (2 + self.BOARD.exponent_softener))
+        force: float = (self.BOARD.gravitational_constant * target.mass) / (distance ** (2 + self.BOARD.exponent_softener))
         # Force vector
         ### Rectification because we go anti-trigonometric way, clockwise.
         vector_force: tuple[float, float] = (force * -math.cos(theta), force * -math.sin(theta))
@@ -269,8 +271,8 @@ class Elem:
         """
         # Force
         self.position = (
-            self.position[0] + (self.force_vector[0] / (self.mass * self.BOARD.mass_softener) * self.BOARD.time_speed),
-            self.position[1] + (self.force_vector[1] / (self.mass * self.BOARD.mass_softener) * self.BOARD.time_speed)
+            self.position[0] + (self.force_vector[0] / (self.mass * self.BOARD.mass_softener + 1) * self.BOARD.time_speed),
+            self.position[1] + (self.force_vector[1] / (self.mass * self.BOARD.mass_softener + 1) * self.BOARD.time_speed)
         )
 
         # Check edges
@@ -328,7 +330,7 @@ class Elem:
 print("# Three body problem simulations")
 ## Config
 user_mode: str = input("Please select a mode {rand/conf/default}[default]: ")
-system_input: dict[str, tuple[int, tuple[int, int], str, int]] = {}
+system_input: dict[str, tuple[int, tuple[int, int], str, int, tuple[float, float]]] = {}
 
 
 if user_mode not in ["", "rand", "conf", "default"]:
@@ -345,7 +347,7 @@ if user_mode == "rand":
         mass_random: int = random.randint(200, 800)
         position_x_random = random.randint(400, 600)
         position_y_random = random.randint(400, 600)
-        system_input[name_random] = (mass_random, (position_x_random, position_y_random), name_random, int(mass_random / 100))
+        system_input[name_random] = (mass_random, (position_x_random, position_y_random), name_random, int(mass_random / 100), (0, 0))
         i += 1
 
 elif user_mode == "conf":
@@ -365,7 +367,7 @@ elif user_mode == "conf":
             manual['position_y'] = listing_input("- Starting position (y): ")
 
             system_input[manual['name']] = (
-                int(manual['mass']), (int(manual['position_x']), int(manual['position_y'])), manual['name'], int(int(manual['mass']) / 100)
+                int(manual['mass']), (int(manual['position_x']), int(manual['position_y'])), manual['name'], int(int(manual['mass']) / 100), (0, 0)
             )
         except ValueError as E:
             if E.__str__() == 'Exit':
@@ -383,10 +385,10 @@ else:
     else:
         print("# Mode selected: default (use default value)")
 
-    system_input["Plan1"] = (500, (445, 560), "Plan1", 5)
-    system_input["Plan2"] = (400, (440, 450), "Plan2", 4)
-    system_input["Plan3"] = (300, (425, 400), "Plan3", 3)
-    system_input["Plan4"] = (300, (400, 350), "Plan4", 6)
+    system_input["Plan1"] = (10500, (445, 560), "Plan1", 15, (10, 0))
+    system_input["Plan2"] = (400, (580, 450), "Plan2", 4, (0, 10))
+    system_input["Plan3"] = (300, (400, 400), "Plan3", 3, (0, 10))
+    system_input["Plan4"] = (300, (300, 350), "Plan4", 3, (0, 10))
 
 
 if not system_input:
@@ -398,8 +400,8 @@ print("Starting...")
 
 # Completion
 SIM: Board = Board(width=1000, height=1000, title="Simulation", fps=30, edges="none",
-                   system=system_input, mass_softener=100, gravitational_constant=(6.67*(10**1)),
-                   exponent_softener=-0.3, bounce_factor=0.9)
+                   system=system_input, mass_softener=1, gravitational_constant=(6.67*(10**1)),
+                   exponent_softener=-0.0, bounce_factor=1.0)
 
 print("---\nEnd")
 
