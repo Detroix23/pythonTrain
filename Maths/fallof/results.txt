@@ -178,3 +178,9 @@ Over 100 iterations total and whilst the bot had 100 moves, it managed to fall o
 The probability of the bot falling of was of 1.0
 
 Classic single run with lx = 5; ly = 5, stx = 3; sty = 3
+Classic single run with lx = 23; ly = 23, stx = 12; sty = 12
+Program took 0.6 seconds to execute
+Over 50 iterations total and whilst the bot had 10 moves, it managed to fall of 0 times
+The probability of the bot falling of was of 0.0
+
+Classic single run with lx = 23; ly = 23, stx = 12; sty = 12
